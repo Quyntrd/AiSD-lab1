@@ -7,7 +7,18 @@ class Matrix
 	int _width;
 	int _height;
 public:
-	Matrix(T value, int width, int height): _value(value), _width(width), _height(height){}
+	Matrix();
+	Matrix(int width, int height);
+	Matrix(const Matrix& other);
+	~Matrix();
 
+	Matrix& operator+=(const Matrix& other);
+	Matrix operator+(const Matrix other) const;
+	Matrix& operator-=(const Matrix& other);
+	Matrix operator-(const Matrix other) const;
+	Matrix operator*(const Matrix other) const;
+	Matrix operator*(const int scalar) const;
+
+	
 };
 
