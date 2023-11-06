@@ -49,7 +49,7 @@ public:
 		}
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				_matrix[i][j] = rand() % up + low;
+				_matrix[i][j] = low+static_cast<T>(rand())/(static_cast<T>(RAND_MAX)/(up-low));
 			}
 		}
 	};					//конструктор со случайными параметрами
@@ -105,9 +105,9 @@ public:
 		}
 		_width = other._width;
 		_height = other._height;
-		_matrix = (T**) new T * [_width];
+		_matrix = (T**) new T * [_width+1];
 		for (int i = 0; i < _width; i++) {
-			_matrix[i] = (T*) new T[_height];
+			_matrix[i] = (T*) new T[_height+1];
 		}
 		for (int i = 0; i < _width; i++) {
 			for (int j = 0; i < _height; j++) {
@@ -152,9 +152,9 @@ public:
 			for (int j = 0; j < other._height; j++) {
 				T sum = 0;
 				for (int k = 0; k < other._width; k++) {
-					sum = _matrix[i][k] * other._matrix[k][j];
+					sum += _matrix[i][k] * other._matrix[k][j];
 				}
-				result[i][j] = sum;
+				result(i, j) = sum;
 			}
 		}
 		return result;
@@ -179,7 +179,16 @@ public:
 		}
 		return result;
 	};			//оператор деления матрицы на скаляр
-	T track(const Matrix& other);					//вычисление следа
+	T track() {
+		if (_width != _height) {
+			throw runtime_error("Matrix is not square");
+		}
+		T result = 0;
+		for (int i = 0; i < _width; i++) {
+			result += _matrix[i][i];
+		}
+		return result;
+	};					//вычисление следа
 	void print()
 	{
 		cout << "Matrix: " << endl;
@@ -213,3 +222,51 @@ public:
 		return true;
 	};
 };
+
+
+
+template<typename T>
+void submatrix(Matrix<T>& matrix, Matrix<T>& temp, int p, int q, int n) {
+	int i = 0, j = 0;
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; col++) {
+			if (row != p && col != q) {
+				temp(i, j++) = matrix(row, col);
+				if (j == n - 1) {
+					j = 0;
+					i++;
+				}
+			}
+		}
+	}
+}
+
+template<typename T>
+T det(Matrix<T>& matrix, int n) {
+	if (matrix.get_rows() != matrix.get_columns()) {
+		throw runtime_error("Matrix is not square");
+	}
+	T determinant = 0;
+	if (n == 1) {
+		return matrix(0,0);
+	}
+	if (n == 2) {
+		return (matrix(0, 0) * matrix(1, 1) - (matrix(0, 1) * matrix(1, 0)));
+	}
+	Matrix<T> temp(n, n, 0);
+	int sign = 1;
+	for (int i = 0; i < n; i++) {
+		submatrix(matrix, temp, 0, i, n);
+		determinant += sign * matrix(0, i) * det(temp, n - 1);
+		sign = -sign;
+	}
+	return determinant;
+}
+
+template<typename T>
+void complanar(Matrix<T>& matrix, int n) {
+	if (det(matrix, n) == 0) {
+		cout << "These vectors are complanar";
+	}
+	else cout << "These vectors are not complanar";
+}
