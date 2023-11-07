@@ -42,7 +42,6 @@ public:
 	Matrix(int width, int height, T up, T low) : _width(width), _height(height)
 	{
 		if (width < 0 || height < 0) throw runtime_error("Incorrect size of matrix");
-		srand(time(0));
 		_matrix = (T**) new T * [width];
 		for (int i = 0; i < width; i++) {
 			_matrix[i] = (T*) new T[height];
@@ -188,16 +187,17 @@ public:
 		}
 		return result;
 	};
-	void print()
+	friend ostream& operator<<(ostream& out, Matrix& matrix)
 	{
-		cout << "Matrix: " << endl;
-		for (int i = 0; i < get_rows(); i++) {
-			for (int j = 0; j < get_columns(); j++) {
-				cout << "\t" << get_matij(i, j) << "\t";
+		out << "Matrix: " << endl;
+		for (int i = 0; i < matrix.get_rows(); i++) {
+			for (int j = 0; j < matrix.get_columns(); j++) {
+				out << "\t" << matrix.get_matij(i, j) << "\t";
 			}
-			cout << endl;
+			out << endl;
 		}
-		cout << "_______________________________________________" << endl << endl;
+		out << "_______________________________________________" << endl << endl;
+		return out;
 	};
 	bool operator==(const Matrix& other) {
 		bool result = true;
@@ -206,6 +206,7 @@ public:
 				for (int j = 0; j < _height; j++) {
 					if (_matrix[i][j] != other._matrix[i][j])
 						result = false;
+						return result;
 				}
 			}
 		}
