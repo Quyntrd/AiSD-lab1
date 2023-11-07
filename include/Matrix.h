@@ -12,7 +12,7 @@ class Matrix
 	int _width;
 	int _height;
 public:
-	Matrix():_width(0), _height(0), _matrix(nullptr) {};										//конструктор по умолчанию
+	Matrix():_width(0), _height(0), _matrix(nullptr) {};
 	Matrix(int width, int height, T value) : _width(width), _height(height)
 	{
 		if (width < 0 || height < 0) throw runtime_error("Incorrect size of matrix");
@@ -25,7 +25,7 @@ public:
 				_matrix[i][j] = value;
 			}
 		}
-	};			//конструктор с параметрами
+	};
 	Matrix(int width, int height) : _width(width), _height(height)
 	{
 		if (width < 0 || height < 0) throw runtime_error("Incorrect size of matrix");
@@ -52,7 +52,7 @@ public:
 				_matrix[i][j] = low+static_cast<T>(rand())/(static_cast<T>(RAND_MAX)/(up-low));
 			}
 		}
-	};					//конструктор со случайными параметрами
+	};
 	Matrix(const Matrix& other) {
 		_width = other._width;
 		_height = other._height;
@@ -67,7 +67,7 @@ public:
 			}
 		}
 
-	};					//конструктор копирования
+	};
 	~Matrix() {
 		if (_height > 0) {
 			for (int i = 0; i < _width; i++) {
@@ -77,8 +77,7 @@ public:
 		if (_width > 0) {
 			delete[] _matrix;
 		}
-	};										//деструктор
-
+	};
 	int get_rows() {
 		return _width;
 	};
@@ -128,7 +127,7 @@ public:
 			}
 		}
 		return result;
-	};		//оператор сложения
+	};
 	Matrix operator-(const Matrix other) const
 	{
 		if (_width != other._width || _height != other._height) {
@@ -141,7 +140,7 @@ public:
 			}
 		}
 		return result;
-	};		//оператор вычитания
+	};
 	Matrix operator*(const Matrix other) const
 	{
 		if (_width != other._height) {
@@ -158,7 +157,7 @@ public:
 			}
 		}
 		return result;
-	};		//оператор умножения матриц
+	};
 	Matrix operator*(const T scalar) const
 	{
 		Matrix<T> result(_width, _height);
@@ -168,7 +167,7 @@ public:
 			}
 		}
 		return result;
-	};			//оператор умножения на скаляр
+	};
 	Matrix operator/(const T scalar) const
 	{
 		Matrix<T> result(_width, _height);
@@ -178,7 +177,7 @@ public:
 			}
 		}
 		return result;
-	};			//оператор деления матрицы на скаляр
+	};
 	T track() {
 		if (_width != _height) {
 			throw runtime_error("Matrix is not square");
@@ -188,17 +187,17 @@ public:
 			result += _matrix[i][i];
 		}
 		return result;
-	};					//вычисление следа
+	};
 	void print()
 	{
 		cout << "Matrix: " << endl;
 		for (int i = 0; i < get_rows(); i++) {
 			for (int j = 0; j < get_columns(); j++) {
-				cout << get_matij(i, j) << "\t";
+				cout << "\t" << get_matij(i, j) << "\t";
 			}
 			cout << endl;
 		}
-		cout << "_________________" << endl << endl;
+		cout << "_______________________________________________" << endl << endl;
 	};
 	bool operator==(const Matrix& other) {
 		bool result = true;
@@ -222,7 +221,6 @@ public:
 		return true;
 	};
 };
-
 
 
 template<typename T>
@@ -266,7 +264,7 @@ T det(Matrix<T>& matrix, int n) {
 template<typename T>
 void complanar(Matrix<T>& matrix, int n) {
 	if (det(matrix, n) == 0) {
-		cout << "These vectors are complanar";
+		cout << "These vectors are complanar"<< endl;
 	}
-	else cout << "These vectors are not complanar";
+	else cout << "These vectors are not complanar" << endl;
 }
